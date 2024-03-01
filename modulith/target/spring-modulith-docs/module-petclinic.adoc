@@ -1,0 +1,7 @@
+[%autowidth.stretch, cols="h,a"]
+|===
+|Base package
+|`org.springframework.samples.petclinic`
+|Spring components
+|* `o.s.s.p.PetClinicApplication`
+|===
