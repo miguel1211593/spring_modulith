@@ -22,7 +22,6 @@ import org.springframework.samples.Owner.OwnerDTO;
 import org.springframework.samples.Owner.OwnerExternalAPI;
 import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetExternalAPI;
-import org.springframework.samples.Visit.AddVisitEvent;
 import org.springframework.samples.Visit.VisitDTO;
 import org.springframework.samples.Visit.VisitExternalAPI;
 import org.springframework.stereotype.Controller;
@@ -42,9 +41,6 @@ import java.util.Set;
 public class VisitController {
 
 	private final VisitExternalAPI visitExternalAPI;
-
-	private final ApplicationEventPublisher eventPublisher;
-
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {

@@ -9,7 +9,6 @@ import org.springframework.samples.Pet.PetInternalAPI;
 import org.springframework.samples.Pet.model.Pet;
 import org.springframework.samples.Pet.model.PetType;
 import org.springframework.samples.Pet.repository.PetRepository;
-import org.springframework.samples.Visit.AddVisitEvent;
 import org.springframework.samples.Visit.VisitDTO;
 import org.springframework.samples.Visit.VisitInternalAPI;
 import org.springframework.stereotype.Service;
