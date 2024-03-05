@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetExternalAPI;
-import org.springframework.samples.Pet.model.PetType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -26,8 +25,8 @@ public class PetController {
 	private final PetExternalAPI petExternalAPI;
 
 	@ModelAttribute("types")
-	public Collection<PetType> populatePetTypes() {
-		return this.petExternalAPI.findPetTypes();
+	public Collection<String> populatePetTypes() {
+		return this.petExternalAPI.findPetTypesByName();
 	}
 
 
@@ -44,8 +43,6 @@ public class PetController {
 	public void initOwnerBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-
-
 
 	@GetMapping("/pets/new")
 	public String initCreationForm(ModelMap model) {

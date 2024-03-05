@@ -4,7 +4,6 @@ import lombok.Data;
 import org.springframework.samples.Visit.VisitDTO;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Data

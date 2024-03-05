@@ -1,20 +1,19 @@
 package org.springframework.samples.Pet.management;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetExternalAPI;
 import org.springframework.samples.Pet.PetInternalAPI;
 import org.springframework.samples.Pet.model.Pet;
-import org.springframework.samples.Pet.model.PetType;
 import org.springframework.samples.Pet.repository.PetRepository;
+import org.springframework.samples.PetType.PetTypeInternalAPI;
 import org.springframework.samples.Visit.VisitDTO;
 import org.springframework.samples.Visit.VisitInternalAPI;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +22,7 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 
 	private final PetRepository petRepository;
 	private final VisitInternalAPI visitInternalApi;
+	private final PetTypeInternalAPI petTypeInternalAPI;
 
 	@Override
 	public List<PetDTO> findPetByOwnerId(Integer ownerId) {
@@ -33,16 +33,18 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 	}
 
 	@Override
-	public Collection<PetType> findPetTypes() {
-		return petRepository.findPetTypes();
-	}
+	public Collection<String> findPetTypesByName() {
+		Collection<String> collection = petTypeInternalAPI.findPetTypes();
 
+		return collection;
+	}
 
 	@Override
 	public PetDTO getPetById(Integer petId) {
 		Pet pet = petRepository.findById(petId);
 		Set<VisitDTO> visitDTOS = visitInternalApi.findVisitByPetId(petId);
-		return new PetDTO(pet.getId(),pet.getName(),pet.getBirthDate(),visitDTOS,pet.getType().getName(),pet.getOwner_id());
+		String petType = petTypeInternalAPI.findPetTypesByPetTypeId(pet.getType());
+		return new PetDTO(pet.getId(),pet.getName(),pet.getBirthDate(),visitDTOS,petType,pet.getOwner_id());
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 				existingPet.setName(petDTO.getName());
 				existingPet.setBirthDate(petDTO.getBirthDate());
 				existingPet.setOwner_id(petDTO.getOwner_id());
-				existingPet.setType(petRepository.findPetTypesByName(petDTO.getType()));
+				existingPet.setType(petTypeInternalAPI.findPetTypesByName(petDTO.getType()));
 				petRepository.save(existingPet);
 			}
 		}
@@ -68,7 +70,7 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 		newPet.setName(petDTO.getName());
 		newPet.setBirthDate(petDTO.getBirthDate());
 		newPet.setOwner_id(petDTO.getOwner_id());
-		newPet.setType(petRepository.findPetTypesByName(petDTO.getType()));
+		newPet.setType(petTypeInternalAPI.findPetTypesByName(petDTO.getType()));
 		petRepository.save(newPet);
 	}
 
@@ -78,7 +80,7 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 			PetDTO petDTO = new PetDTO();
 			petDTO.setId(pet.getId());
 			petDTO.setName(pet.getName());
-			petDTO.setType(pet.getType().getName());
+			petDTO.setType(petTypeInternalAPI.findPetTypesByPetTypeId(pet.getType()));
 			petDTO.setBirthDate(pet.getBirthDate());
 			petDTO.setOwner_id(pet.getOwner_id());
 			return petDTO;

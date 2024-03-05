@@ -2,11 +2,9 @@ package org.springframework.samples.Pet.model;
 
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.Visit.VisitDTO;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "pets")
@@ -50,17 +48,16 @@ public class Pet {
 		this.birthDate = birthDate;
 	}
 
-	public PetType getType() {
-		return type;
+	public Integer getType() {
+		return type_id;
 	}
 
-	public void setType(PetType type) {
-		this.type = type;
+	public void setType(Integer type) {
+		this.type_id = type;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "type_id")
-	private PetType type;
+	@Column(name = "type_id")
+	private Integer type_id;
 
 	public Integer getOwner_id() {
 		return owner_id;
