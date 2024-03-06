@@ -8,7 +8,6 @@ import org.springframework.samples.Visit.model.Visit;
 import org.springframework.samples.Visit.repository.VisitRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,14 +27,6 @@ public class VisitManagement implements VisitExternalAPI, VisitInternalAPI {
 		newVisit.setDescription(visitDTO.getDescription());
 		newVisit.setPet_id(visitDTO.getPet_id());
 		visitRepository.save(newVisit);
-		List<Visit> visits = visitRepository.findAll();
-		for (Visit visit : visits) {
-			System.out.println("Visit ID: " + visit.getId());
-			System.out.println("Visit Date: " + visit.getDate());
-			System.out.println("Visit Description: " + visit.getDescription());
-			System.out.println("Pet: " + visit.getPet_id());
-
-		}
 	}
 
 	@Override

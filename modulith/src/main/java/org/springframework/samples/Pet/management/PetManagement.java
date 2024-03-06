@@ -1,19 +1,18 @@
 package org.springframework.samples.Pet.management;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetExternalAPI;
 import org.springframework.samples.Pet.PetInternalAPI;
 import org.springframework.samples.Pet.model.Pet;
 import org.springframework.samples.Pet.repository.PetRepository;
+import org.springframework.samples.PetType.PetTypeDTO;
 import org.springframework.samples.PetType.PetTypeInternalAPI;
 import org.springframework.samples.Visit.VisitDTO;
 import org.springframework.samples.Visit.VisitInternalAPI;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +28,13 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 		List<Pet> pets = petRepository.findPetByOwnerId(ownerId);
 		return pets.stream()
 			.map(this::convertToDTO)
+			.map(this::createPetDTOWithVisits)
 			.collect(Collectors.toList());
+	}
+
+	private PetDTO createPetDTOWithVisits(PetDTO pet) {
+		Set<VisitDTO> visitDTOS = visitInternalApi.findVisitByPetId(pet.getId());
+		return new PetDTO(pet.getId(), pet.getName(), pet.getBirthDate(), visitDTOS, pet.getType(), pet.getOwner_id());
 	}
 
 	@Override

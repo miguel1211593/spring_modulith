@@ -25,27 +25,14 @@ public class OwnerManagement implements OwnerExternalAPI, OwnerInternalAPI {
 
 	private final OwnerRepository repository;
 	private final PetInternalAPI petInternalAPI;
-	private final VisitInternalAPI visitInternalAPI;
 
 	@Override
 	public OwnerDTO findById(Integer id) {
 		Owner owner = repository.findById(id);
-
 		OwnerDTO ownerDTO = convertToDTO(owner);
-
-		List<PetDTO> petDTOS = petInternalAPI.findPetByOwnerId(id)
-			.stream()
-			.map(this::createPetDTOWithVisits)
-			.collect(Collectors.toList());
-
+		List<PetDTO> petDTOS = petInternalAPI.findPetByOwnerId(id);
 		ownerDTO.setPets(petDTOS);
-
 		return ownerDTO;
-	}
-
-	private PetDTO createPetDTOWithVisits(PetDTO pet) {
-		Set<VisitDTO> visitDTOS = visitInternalAPI.findVisitByPetId(pet.getId());
-		return new PetDTO(pet.getId(), pet.getName(), pet.getBirthDate(), visitDTOS, pet.getType(), pet.getOwner_id());
 	}
 
 	@Override
