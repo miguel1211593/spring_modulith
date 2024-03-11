@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+left to right direction
+actor Veterinarian as V
+
+package Visit{
+usecase UC7 as "Add Visit"
+usecase UC8 as "View Visit By Pet"
+}
+
+V --> UC7
+V --> UC8
+@enduml
