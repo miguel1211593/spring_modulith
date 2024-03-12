@@ -1,0 +1,27 @@
+@startuml
+
+actor Veterinarian
+participant "OwnerController" as Controller
+participant "OwnerManagement" as Service
+participant "OwnerMapper" as Mapper
+participant "OwnerRepository" as Repository
+
+Veterinarian -> Controller: GET /owners
+activate Controller
+Controller -> Service: findByLastName(lastName)
+activate Service
+Service -> Repository: findByLastName(lastName))
+activate Repository
+Repository --> Service: Page<Owner>
+deactivate Repository
+Service -> Mapper: toOwnerDTO(Owner)
+activate Mapper
+Mapper --> Service: List<OwnerDTO>
+deactivate Mapper
+Service --> Controller: PageImpl<>(ownerDTOList)
+deactivate Service
+Controller -> Veterinarian:return "owners/ownersList"
+deactivate Controller
+
+
+@enduml

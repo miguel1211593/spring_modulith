@@ -1,6 +1,5 @@
 package org.springframework.samples.Visit;
 
-import java.util.List;
 import java.util.Set;
 
 public interface VisitInternalAPI {

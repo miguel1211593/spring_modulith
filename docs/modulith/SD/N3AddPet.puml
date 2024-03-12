@@ -1,0 +1,43 @@
+@startuml
+
+actor Veterinarian
+participant "PetController" as Controller
+participant "PetManagement" as Service
+participant "PetMapper" as Mapper
+participant "PetRepository" as Repository
+participant "PetTypeInternalAPI" as PetType
+
+
+Veterinarian -> Controller: POST /owners/{ownerId}/pets/new
+Controller -> Service: getPetByName()
+activate Controller
+activate Service
+
+Service -> Repository: findPetByName()
+activate Repository
+Repository --> Service: pet
+deactivate Repository
+Service --> Controller: pet
+alt pet == null
+    Controller -> Service: save(petDTO)
+    Service -> PetType: findPetTypeByName(petDTO.getType)
+    activate PetType
+    PetType --> Service: petTypeId
+    deactivate PetType
+    Service -> Service: petDTO.setType(petTypeId)
+    Service -> Mapper: toPet(petDTO)
+    activate Mapper
+    Mapper --> Service: pet
+    deactivate Mapper
+    Service -> Repository: save(pet)
+    Service --> Controller: success
+    Controller --> Veterinarian: success
+else pet != null
+    Service --> Controller: pet == null
+    deactivate Service
+    Controller --> Veterinarian: error: Pet already exists
+    deactivate Controller
+end
+
+
+@enduml

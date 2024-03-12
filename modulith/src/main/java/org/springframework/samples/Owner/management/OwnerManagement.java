@@ -6,53 +6,65 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.Owner.OwnerDTO;
 import org.springframework.samples.Owner.OwnerExternalAPI;
+import org.springframework.samples.Owner.OwnerInternalAPI;
+import org.springframework.samples.Owner.mapper.OwnerMapper;
 import org.springframework.samples.Owner.model.Owner;
 import org.springframework.samples.Owner.repository.OwnerRepository;
 import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetInternalAPI;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OwnerManagement implements OwnerExternalAPI {
+public class OwnerManagement implements OwnerExternalAPI, OwnerInternalAPI {
 
 	private final OwnerRepository repository;
 	private final PetInternalAPI petInternalAPI;
+	private final OwnerMapper ownerMapper;
 
 	@Override
 	public OwnerDTO findById(Integer id) {
 		Owner owner = repository.findById(id);
-		OwnerDTO ownerDTO = convertToDTO(owner);
+		OwnerDTO ownerDTO = ownerMapper.toOwnerDTO(owner);
 		List<PetDTO> petDTOS = petInternalAPI.findPetByOwnerId(id);
 		ownerDTO.setPets(petDTOS);
+
 		return ownerDTO;
 	}
 
 	@Override
+	@Transactional
 	public Integer save(OwnerDTO ownerDTO) {
 		if (ownerDTO.getId() != null) {
 			Owner existingOwner = repository.findById(ownerDTO.getId());
 			if (existingOwner != null) {
-				existingOwner.setFirstName(ownerDTO.getFirstName());
-				existingOwner.setLastName(ownerDTO.getLastName());
-				existingOwner.setAddress(ownerDTO.getAddress());
-				existingOwner.setCity(ownerDTO.getCity());
-				existingOwner.setTelephone(ownerDTO.getTelephone());
-				repository.save(existingOwner);
+				updateOwner(existingOwner, ownerDTO);
 				return existingOwner.getId();
 			}
 		}
-		Owner newOwner = new Owner();
-		newOwner.setAddress(ownerDTO.getAddress());
-		newOwner.setFirstName(ownerDTO.getFirstName());
-		newOwner.setLastName(ownerDTO.getLastName());
-		newOwner.setCity(ownerDTO.getCity());
-		newOwner.setTelephone(ownerDTO.getTelephone());
-		repository.save(newOwner);
+		Owner newOwner = createOwner(ownerDTO);
+
 		return newOwner.getId();
+	}
+
+	private void updateOwner(Owner existingOwner, OwnerDTO ownerDTO) {
+		existingOwner.setFirstName(ownerDTO.getFirstName());
+		existingOwner.setLastName(ownerDTO.getLastName());
+		existingOwner.setAddress(ownerDTO.getAddress());
+		existingOwner.setCity(ownerDTO.getCity());
+		existingOwner.setTelephone(ownerDTO.getTelephone());
+		repository.save(existingOwner);
+	}
+
+	private Owner createOwner(OwnerDTO ownerDTO) {
+		Owner newOwner = ownerMapper.toOwner(ownerDTO);
+		repository.save(newOwner);
+		return newOwner;
 	}
 
 	@Override
@@ -65,14 +77,12 @@ public class OwnerManagement implements OwnerExternalAPI {
 		return new PageImpl<>(ownerDTOList, pageable, pageOwner.getTotalElements());
 	}
 
+	@Override
+	public OwnerDTO findByName(String firstName, String lastName) {
+		return convertToDTO(repository.findByName(firstName,lastName));
+	}
+
 	private OwnerDTO convertToDTO(Owner owner) {
-		OwnerDTO ownerDTO = new OwnerDTO();
-		ownerDTO.setId(owner.getId());
-		ownerDTO.setFirstName(owner.getFirstName());
-		ownerDTO.setLastName(owner.getLastName());
-		ownerDTO.setAddress(owner.getAddress());
-		ownerDTO.setCity(owner.getCity());
-		ownerDTO.setTelephone(owner.getTelephone());
-		return ownerDTO;
+        return ownerMapper.toOwnerDTO(owner);
 	}
 }

@@ -1,0 +1,39 @@
+@startuml
+
+actor Veterinarian
+participant "OwnerController" as Controller
+participant "OwnerManagement" as Service
+participant "OwnerMapper" as Mapper
+participant "OwnerRepository" as Repository
+
+Veterinarian -> Controller: POST /owners/new
+alt correct data
+activate Controller
+Controller -> Service: findById()
+activate Service
+Service -> Repository: findById()
+activate Repository
+Repository --> Service: owner
+deactivate Repository
+alt owner == null
+Service --> Controller: owner == null
+Controller -> Service: save(ownerDTO)
+Service -> Mapper: toOwner(ownerDTO)
+activate Mapper
+Mapper --> Service: owner
+deactivate Mapper
+Service -> Repository: save(owner)
+Service --> Controller: owner_id
+Controller --> Veterinarian: return "redirect:/owners/owner_id"
+else owner != null
+Service --> Controller: owner != null
+deactivate Service
+Controller --> Veterinarian: error: Owner already exists
+end
+else incorrect data
+Controller --> Veterinarian: error
+deactivate Controller
+end
+
+
+@enduml

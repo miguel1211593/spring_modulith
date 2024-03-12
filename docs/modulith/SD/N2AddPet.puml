@@ -1,0 +1,28 @@
+@startuml
+
+actor Veterinarian
+participant "Pet" as Pet
+participant "PetType" as PetType
+
+Veterinarian -> Pet: POST /owners/{ownerId}/pets/new
+activate Pet
+Pet -> Pet: verify if Pet already exists
+alt pet doesn't exist
+    Pet -> Pet: verify new pet data
+    alt correct data
+    Pet -> PetType: get type
+    activate PetType
+    PetType --> Pet: type
+    deactivate PetType
+    Pet -> Pet : save(pet)
+    Pet --> Veterinarian: return "redirect:/owners/{ownerId}"
+    else incorrect data
+    Pet --> Veterinarian: error: invalid data
+    end
+else pet exits
+    Pet --> Veterinarian: error: Pet already exists
+    deactivate Pet
+end
+
+
+@enduml

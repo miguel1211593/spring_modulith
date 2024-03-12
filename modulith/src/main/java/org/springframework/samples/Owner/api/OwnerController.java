@@ -8,10 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.Owner.OwnerDTO;
 import org.springframework.samples.Owner.OwnerExternalAPI;
-import org.springframework.samples.Owner.model.Owner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +52,12 @@ public class OwnerController {
 	}
 	@PostMapping("/owners/new")
 	public String processCreationForm(@Valid OwnerDTO owner, BindingResult result, RedirectAttributes redirectAttributes) {
+
+		if (StringUtils.hasText(owner.getLastName())  && ownerExternalAPI.findByName(owner.getFirstName(),owner.getLastName()) != null) {
+			result.rejectValue("firstName", "duplicate", "already exists");
+			result.rejectValue("lastName", "duplicate", "already exists");
+		}
+
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("error", "There was an error in creating the owner.");
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;

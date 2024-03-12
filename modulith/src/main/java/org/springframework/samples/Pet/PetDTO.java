@@ -27,4 +27,17 @@ public class PetDTO {
 		this.type = type;
 		this.owner_id = owner_id;
 	}
+
+	public PetDTO(Integer id, String name, LocalDate birthDate, Set<VisitDTO> visits, Integer owner_id) {
+		this.id = id;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.visits = visits;
+		this.owner_id = owner_id;
+	}
+
+	public PetDTO(Integer id, Integer owner_id) {
+		this.id = id;
+		this.owner_id = owner_id;
+	}
 }

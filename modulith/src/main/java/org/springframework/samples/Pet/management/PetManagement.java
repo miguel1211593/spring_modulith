@@ -2,9 +2,11 @@ package org.springframework.samples.Pet.management;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetExternalAPI;
 import org.springframework.samples.Pet.PetInternalAPI;
+import org.springframework.samples.Pet.mapper.PetMapper;
 import org.springframework.samples.Pet.model.Pet;
 import org.springframework.samples.Pet.repository.PetRepository;
 import org.springframework.samples.PetType.PetTypeDTO;
@@ -22,6 +24,7 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 	private final PetRepository petRepository;
 	private final VisitInternalAPI visitInternalApi;
 	private final PetTypeInternalAPI petTypeInternalAPI;
+	private final PetMapper petMapper;
 
 	@Override
 	public List<PetDTO> findPetByOwnerId(Integer ownerId) {
@@ -39,9 +42,7 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 
 	@Override
 	public Collection<String> findPetTypesByName() {
-		Collection<String> collection = petTypeInternalAPI.findPetTypes();
-
-		return collection;
+        return petTypeInternalAPI.findPetTypes();
 	}
 
 	@Override
@@ -62,32 +63,23 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 		if (petDTO.getId() != null) {
 			Pet existingPet = petRepository.findById(petDTO.getId());
 			if (existingPet != null) {
-				existingPet.setId(petDTO.getId());
-				existingPet.setName(petDTO.getName());
-				existingPet.setBirthDate(petDTO.getBirthDate());
-				existingPet.setOwner_id(petDTO.getOwner_id());
-				existingPet.setType(petTypeInternalAPI.findPetTypesByName(petDTO.getType()));
+				existingPet = petMapper.toPet(petDTO);
 				petRepository.save(existingPet);
 			}
 		}
-		Pet newPet = new Pet();
-		newPet.setId(petDTO.getId());
-		newPet.setName(petDTO.getName());
-		newPet.setBirthDate(petDTO.getBirthDate());
-		newPet.setOwner_id(petDTO.getOwner_id());
-		newPet.setType(petTypeInternalAPI.findPetTypesByName(petDTO.getType()));
-		petRepository.save(newPet);
+		Integer petTypeId = petTypeInternalAPI.findPetTypesByName(petDTO.getType());
+		petDTO.setType(String.valueOf(petTypeId));
+		Pet pet = petMapper.toPet(petDTO);
+		petRepository.save(pet);
 	}
+
+
 
 
 	private PetDTO convertToDTO(Pet pet) {
 		if (pet != null) {
-			PetDTO petDTO = new PetDTO();
-			petDTO.setId(pet.getId());
-			petDTO.setName(pet.getName());
+			PetDTO petDTO = petMapper.toPetDTO(pet);
 			petDTO.setType(petTypeInternalAPI.findPetTypesByPetTypeId(pet.getType()));
-			petDTO.setBirthDate(pet.getBirthDate());
-			petDTO.setOwner_id(pet.getOwner_id());
 			return petDTO;
 		}
 		return null;

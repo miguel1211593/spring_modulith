@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetExternalAPI;
+import org.springframework.samples.PetType.PetTypeDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;

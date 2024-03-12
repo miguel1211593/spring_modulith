@@ -2,6 +2,7 @@ package org.springframework.samples.PetType.management;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.samples.PetType.PetTypeDTO;
 import org.springframework.samples.PetType.PetTypeInternalAPI;
 import org.springframework.samples.PetType.model.PetType;
 import org.springframework.samples.PetType.repository.PetTypeRepository;

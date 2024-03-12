@@ -1,9 +1,11 @@
 package org.springframework.samples.Visit.management;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.samples.Visit.VisitDTO;
 import org.springframework.samples.Visit.VisitExternalAPI;
 import org.springframework.samples.Visit.VisitInternalAPI;
+import org.springframework.samples.Visit.mapper.VisitMapper;
 import org.springframework.samples.Visit.model.Visit;
 import org.springframework.samples.Visit.repository.VisitRepository;
 import org.springframework.stereotype.Service;
@@ -18,15 +20,12 @@ import java.util.stream.Collectors;
 public class VisitManagement implements VisitExternalAPI, VisitInternalAPI {
 
 	private final VisitRepository visitRepository;
-
+	@Qualifier("visitMapper")
+	private final VisitMapper mapper;
 
 	@Override
 	public void save(VisitDTO visitDTO) {
-		Visit newVisit = new Visit();
-		newVisit.setDate(visitDTO.getDate());
-		newVisit.setDescription(visitDTO.getDescription());
-		newVisit.setPet_id(visitDTO.getPet_id());
-		visitRepository.save(newVisit);
+		visitRepository.save(mapper.toVisit(visitDTO));
 	}
 
 	@Override

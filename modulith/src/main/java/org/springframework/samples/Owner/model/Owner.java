@@ -3,11 +3,10 @@ package org.springframework.samples.Owner.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.samples.Pet.PetDTO;
+
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Table(name = "owners")
