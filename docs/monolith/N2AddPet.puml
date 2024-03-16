@@ -1,0 +1,27 @@
+@startuml
+
+actor Veterinarian
+participant "Controller" as Controller
+participant "Model" as Model
+participant "Repository" as Repository
+
+Veterinarian -> Controller: POST /owners/{ownerId}/pets/new
+activate Controller
+Controller -> Controller: verify if Pet already exists
+alt pet doesn't exist
+    Controller -> Controller: verify new pet data
+    alt correct data
+    Controller -> Model: addPet
+    Model --> Controller: owner
+    Controller -> Repository: save(owner)
+    Controller --> Veterinarian: return "redirect:/owners/{ownerId}"
+    else incorrect data
+    Controller --> Veterinarian: error: invalid data
+    end
+else pet exits
+    Controller --> Veterinarian: error: Pet already exists
+    deactivate Controller
+end
+
+
+@enduml

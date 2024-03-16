@@ -1,0 +1,25 @@
+@startuml
+
+actor Veterinarian
+participant "controller: PetController" as Controller
+participant "repository: PetRepository" as Repository
+participant "model: Owner" as Owner
+
+
+Veterinarian -> Controller: POST /owners/{ownerId}/pets/new
+Controller -> Owner: owner.getPet()
+activate Controller
+activate Owner
+Owner --> Controller: pet
+deactivate Owner
+alt pet == null
+    Controller -> Owner: owner.addPet(pet)
+    Controller -> Repository: save(owner)
+    Controller --> Veterinarian: success
+else pet != null
+    Controller --> Veterinarian: error: Pet already exists
+    deactivate Controller
+end
+
+
+@enduml

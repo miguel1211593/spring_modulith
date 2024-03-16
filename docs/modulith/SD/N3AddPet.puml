@@ -31,10 +31,9 @@ alt pet == null
     deactivate Mapper
     Service -> Repository: save(pet)
     Service --> Controller: success
+    deactivate Service
     Controller --> Veterinarian: success
 else pet != null
-    Service --> Controller: pet == null
-    deactivate Service
     Controller --> Veterinarian: error: Pet already exists
     deactivate Controller
 end

@@ -1,0 +1,17 @@
+@startuml
+
+actor Veterinarian
+participant "controller: OwnerController" as Controller
+participant "repository: OwnerRepository" as Repository
+
+Veterinarian -> Controller: GET /owners
+activate Controller
+Controller -> Repository: findByLastName(lastName)
+activate Repository
+Repository --> Controller: Page<Owner>
+deactivate Repository
+Controller -> Veterinarian:return "owners/ownersList"
+deactivate Controller
+
+
+@enduml

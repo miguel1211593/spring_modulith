@@ -1,0 +1,18 @@
+@startuml
+
+actor Veterinarian
+participant "Controller" as Controller
+participant "Repository" as Repository
+
+Veterinarian -> Controller: POST /owners/new
+activate Controller
+Controller -> Controller: verify new Owner data
+alt correct data
+Controller -> Repository: save(owner)
+Controller --> Veterinarian: return "redirect:/owners/" + new_owner_id
+else incorrect data
+Controller --> Veterinarian: error
+end
+
+
+@enduml
