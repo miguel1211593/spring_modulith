@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.modulith.test.ApplicationModuleTest;
 import org.springframework.samples.Visit.repository.VisitRepository;
 import org.springframework.samples.Visit.model.Visit;
-import org.springframework.samples.petclinic.owner.Owner;
-import org.springframework.samples.petclinic.owner.Pet;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
