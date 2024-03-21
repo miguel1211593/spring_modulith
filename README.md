@@ -18,4 +18,5 @@ Monolith POST
 
 Modulith POST
 
-![image](https://github.com/miguel1211593/spring_modulith/assets/106148619/c5169f98-f046-43c1-be15-c39bf2fde6c1)
+![image](https://github.com/miguel1211593/spring_modulith/assets/106148619/11996136-f165-47c9-972d-53c7febb81a7)
+
