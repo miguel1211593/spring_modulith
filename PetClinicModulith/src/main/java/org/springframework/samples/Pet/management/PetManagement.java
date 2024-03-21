@@ -45,11 +45,13 @@ public class PetManagement implements PetExternalAPI {
 	public void save(Pet pet) {
 		if (pet.getId() != null) {
 			Pet existingPet = petRepository.findById(pet.getId());
-			if (existingPet != null) {
-				petRepository.save(existingPet);
-			}
+			existingPet.setName(pet.getName());
+			existingPet.setBirthDate(pet.getBirthDate());
+			existingPet.setType(pet.getType());
+			petRepository.save(existingPet);
+		}else{
+			petRepository.save(pet);
 		}
-		petRepository.save(pet);
 	}
 
 
