@@ -42,7 +42,7 @@ public class VisitController {
 
 	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
 	@Transactional
-	public String processNewVisitForm(@PathVariable("petId") int petId, @Valid Visit visit, RedirectAttributes redirectAttributes) {
+	public String processNewVisitForm(@PathVariable("petId") int petId, @Valid @RequestBody Visit visit, RedirectAttributes redirectAttributes) {
 		visit.setPet_id(petId);
 		visitExternalAPI.save(visit);
 		redirectAttributes.addFlashAttribute("message", "Your visit has been booked");
