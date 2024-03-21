@@ -3,7 +3,6 @@ package org.springframework.samples.Pet.management;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.samples.Pet.PetExternalAPI;
-import org.springframework.samples.Pet.PetInternalAPI;
 import org.springframework.samples.Pet.model.Pet;
 import org.springframework.samples.Pet.model.PetType;
 import org.springframework.samples.Pet.model.PetVisit;
@@ -16,16 +15,13 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class PetManagement implements PetInternalAPI, PetExternalAPI {
+public class PetManagement implements PetExternalAPI {
 
 	private final PetRepository petRepository;
 	private final PetTypeRepository petTypeRepository;
 	private final PetVisitRepository petVisitRepository;
 
-	@Override
-	public List<Pet> findPetByOwnerId(Integer ownerId) {
-        return petRepository.findPetByOwnerId(ownerId);
-	}
+
 
 	@Override
 	public Collection<PetType> findPetTypes() {
@@ -50,7 +46,6 @@ public class PetManagement implements PetInternalAPI, PetExternalAPI {
 		if (pet.getId() != null) {
 			Pet existingPet = petRepository.findById(pet.getId());
 			if (existingPet != null) {
-				//existingPet = petMapper.toPet(petDTO);
 				petRepository.save(existingPet);
 			}
 		}

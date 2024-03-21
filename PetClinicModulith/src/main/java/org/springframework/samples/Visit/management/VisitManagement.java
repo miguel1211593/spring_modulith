@@ -2,7 +2,6 @@ package org.springframework.samples.Visit.management;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.samples.Visit.VisitExternalAPI;
-import org.springframework.samples.Visit.VisitInternalAPI;
 import org.springframework.samples.Visit.model.Visit;
 import org.springframework.samples.Visit.repository.VisitRepository;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VisitManagement implements VisitExternalAPI, VisitInternalAPI {
+public class VisitManagement implements VisitExternalAPI {
 
 	private final VisitRepository visitRepository;
 

@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.Owner.OwnerExternalAPI;
-import org.springframework.samples.Owner.OwnerInternalAPI;
 import org.springframework.samples.Owner.model.Owner;
 import org.springframework.samples.Owner.model.OwnerPet;
 import org.springframework.samples.Owner.model.OwnerVisit;
@@ -14,9 +13,7 @@ import org.springframework.samples.Owner.repository.OwnerPetRepository;
 
 
 import org.springframework.samples.Owner.repository.OwnerVisitRepository;
-import org.springframework.samples.Pet.PetInternalAPI;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class OwnerManagement implements OwnerExternalAPI, OwnerInternalAPI {
+public class OwnerManagement implements OwnerExternalAPI {
 
 	private final OwnerRepository repository;
 	private final OwnerPetRepository petRepository;
