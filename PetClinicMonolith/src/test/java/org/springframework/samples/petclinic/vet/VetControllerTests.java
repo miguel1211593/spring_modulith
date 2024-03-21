@@ -26,10 +26,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.samples.petclinic.controller.VetController;
-import org.springframework.samples.petclinic.model.Specialty;
-import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.repository.VetRepository;
+import org.springframework.samples.petclinic.controller.MonoVetController;
+import org.springframework.samples.petclinic.model.MonoSpecialty;
+import org.springframework.samples.petclinic.model.MonoVet;
+import org.springframework.samples.petclinic.repository.MonoVetRepository;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -41,10 +41,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Test class for the {@link VetController}
+ * Test class for the {@link MonoVetController}
  */
 
-@WebMvcTest(VetController.class)
+@WebMvcTest(MonoVetController.class)
 @DisabledInNativeImage
 @DisabledInAotMode
 class VetControllerTests {
@@ -53,22 +53,22 @@ class VetControllerTests {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private VetRepository vets;
+	private MonoVetRepository vets;
 
-	private Vet james() {
-		Vet james = new Vet();
+	private MonoVet james() {
+		MonoVet james = new MonoVet();
 		james.setFirstName("James");
 		james.setLastName("Carter");
 		james.setId(1);
 		return james;
 	}
 
-	private Vet helen() {
-		Vet helen = new Vet();
+	private MonoVet helen() {
+		MonoVet helen = new MonoVet();
 		helen.setFirstName("Helen");
 		helen.setLastName("Leary");
 		helen.setId(2);
-		Specialty radiology = new Specialty();
+		MonoSpecialty radiology = new MonoSpecialty();
 		radiology.setId(1);
 		radiology.setName("radiology");
 		helen.addSpecialty(radiology);
@@ -79,7 +79,7 @@ class VetControllerTests {
 	void setup() {
 		given(this.vets.findAll()).willReturn(Lists.newArrayList(james(), helen()));
 		given(this.vets.findAll(any(Pageable.class)))
-			.willReturn(new PageImpl<Vet>(Lists.newArrayList(james(), helen())));
+			.willReturn(new PageImpl<MonoVet>(Lists.newArrayList(james(), helen())));
 
 	}
 

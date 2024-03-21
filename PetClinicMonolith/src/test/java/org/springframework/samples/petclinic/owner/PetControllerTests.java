@@ -25,12 +25,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.controller.PetController;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.model.PetTypeFormatter;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
+import org.springframework.samples.petclinic.controller.MonoPetController;
+import org.springframework.samples.petclinic.model.MonoOwner;
+import org.springframework.samples.petclinic.model.MonoPet;
+import org.springframework.samples.petclinic.model.MonoPetType;
+import org.springframework.samples.petclinic.model.MonoPetTypeFormatter;
+import org.springframework.samples.petclinic.repository.MonoOwnerRepository;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -42,12 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
- * Test class for the {@link PetController}
+ * Test class for the {@link MonoPetController}
  *
  * @author Colin But
  */
-@WebMvcTest(value = PetController.class,
-		includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE))
+@WebMvcTest(value = MonoPetController.class,
+		includeFilters = @ComponentScan.Filter(value = MonoPetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE))
 @DisabledInNativeImage
 @DisabledInAotMode
 class PetControllerTests {
@@ -60,16 +60,16 @@ class PetControllerTests {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private OwnerRepository owners;
+	private MonoOwnerRepository owners;
 
 	@BeforeEach
 	void setup() {
-		PetType cat = new PetType();
+		MonoPetType cat = new MonoPetType();
 		cat.setId(3);
 		cat.setName("hamster");
 		given(this.owners.findPetTypes()).willReturn(Lists.newArrayList(cat));
-		Owner owner = new Owner();
-		Pet pet = new Pet();
+		MonoOwner owner = new MonoOwner();
+		MonoPet pet = new MonoPet();
 		owner.addPet(pet);
 		pet.setId(TEST_PET_ID);
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(owner);

@@ -1,12 +1,19 @@
 package org.springframework.samples.Owner;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.Owner.model.Owner;
+import org.springframework.samples.Owner.model.OwnerPet;
+
+import java.util.List;
 
 public interface OwnerExternalAPI {
-	OwnerDTO findById(Integer id);
-	Integer save(OwnerDTO owner);
-	Page<OwnerDTO> findByLastName(String lastname, Pageable pageable);
+	Owner findById(Integer id);
+	Integer save(Owner owner);
+	Page<Owner> findByLastName(String lastname, Pageable pageable);
 
-	OwnerDTO findByName(String firstName, String lastName);
+	List<OwnerPet> findPetByOwner(Integer owner_id);
+
+	Owner findByName(String firstName, String lastName);
 }

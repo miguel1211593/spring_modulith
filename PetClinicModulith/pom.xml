@@ -21,12 +21,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.samples</groupId>
-            <artifactId>PetClinicMonolith</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
     <build>
         <plugins>

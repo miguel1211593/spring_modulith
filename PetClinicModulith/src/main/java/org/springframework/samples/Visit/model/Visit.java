@@ -16,17 +16,6 @@ public class Visit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public boolean isNew() {
-		return this.id == null;
-	}
 	@Column(name = "visit_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
@@ -34,8 +23,20 @@ public class Visit {
 	@NotBlank
 	private String description;
 
+	@Column(name = "pet_id")
+	private Integer pet_id;
+
+
 	public Visit() {
 		this.date = LocalDate.now();
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public LocalDate getDate() {
@@ -62,8 +63,10 @@ public class Visit {
 		this.pet_id = pet_id;
 	}
 
-	@Column(name = "pet_id")
-	private Integer pet_id;
+	public boolean isNew() {
+		return this.id == null;
+	}
+
 
 
 }

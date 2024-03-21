@@ -32,12 +32,12 @@ import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.model.PetTypeFormatter;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
+import org.springframework.samples.petclinic.model.MonoPetType;
+import org.springframework.samples.petclinic.model.MonoPetTypeFormatter;
+import org.springframework.samples.petclinic.repository.MonoOwnerRepository;
 
 /**
- * Test class for {@link PetTypeFormatter}
+ * Test class for {@link MonoPetTypeFormatter}
  *
  * @author Colin But
  */
@@ -46,18 +46,18 @@ import org.springframework.samples.petclinic.repository.OwnerRepository;
 class PetTypeFormatterTests {
 
 	@Mock
-	private OwnerRepository pets;
+	private MonoOwnerRepository pets;
 
-	private PetTypeFormatter petTypeFormatter;
+	private MonoPetTypeFormatter petTypeFormatter;
 
 	@BeforeEach
 	void setup() {
-		this.petTypeFormatter = new PetTypeFormatter(pets);
+		this.petTypeFormatter = new MonoPetTypeFormatter(pets);
 	}
 
 	@Test
 	void testPrint() {
-		PetType petType = new PetType();
+		MonoPetType petType = new MonoPetType();
 		petType.setName("Hamster");
 		String petTypeName = this.petTypeFormatter.print(petType, Locale.ENGLISH);
 		assertThat(petTypeName).isEqualTo("Hamster");
@@ -66,7 +66,7 @@ class PetTypeFormatterTests {
 	@Test
 	void shouldParse() throws ParseException {
 		given(this.pets.findPetTypes()).willReturn(makePetTypes());
-		PetType petType = petTypeFormatter.parse("Bird", Locale.ENGLISH);
+		MonoPetType petType = petTypeFormatter.parse("Bird", Locale.ENGLISH);
 		assertThat(petType.getName()).isEqualTo("Bird");
 	}
 
@@ -80,16 +80,16 @@ class PetTypeFormatterTests {
 
 	/**
 	 * Helper method to produce some sample pet types just for test purpose
-	 * @return {@link Collection} of {@link PetType}
+	 * @return {@link Collection} of {@link MonoPetType}
 	 */
-	private List<PetType> makePetTypes() {
-		List<PetType> petTypes = new ArrayList<>();
-		petTypes.add(new PetType() {
+	private List<MonoPetType> makePetTypes() {
+		List<MonoPetType> petTypes = new ArrayList<>();
+		petTypes.add(new MonoPetType() {
 			{
 				setName("Dog");
 			}
 		});
-		petTypes.add(new PetType() {
+		petTypes.add(new MonoPetType() {
 			{
 				setName("Bird");
 			}

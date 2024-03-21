@@ -44,15 +44,15 @@ class ValidatorTests {
 	void shouldNotValidateWhenFirstNameEmpty() {
 
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Person person = new Person();
+		MonoPerson person = new MonoPerson();
 		person.setFirstName("");
 		person.setLastName("smith");
 
 		Validator validator = createValidator();
-		Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+		Set<ConstraintViolation<MonoPerson>> constraintViolations = validator.validate(person);
 
 		assertThat(constraintViolations).hasSize(1);
-		ConstraintViolation<Person> violation = constraintViolations.iterator().next();
+		ConstraintViolation<MonoPerson> violation = constraintViolations.iterator().next();
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("firstName");
 		assertThat(violation.getMessage()).isEqualTo("must not be blank");
 	}

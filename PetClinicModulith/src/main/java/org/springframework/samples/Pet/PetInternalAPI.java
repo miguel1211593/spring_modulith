@@ -1,9 +1,11 @@
 package org.springframework.samples.Pet;
 
+import org.springframework.samples.Pet.model.Pet;
+
 import java.util.List;
 
 public interface PetInternalAPI {
 
-	List<PetDTO> findPetByOwnerId(Integer owner_id);
+	List<Pet> findPetByOwnerId(Integer owner_id);
 
 }

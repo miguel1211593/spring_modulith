@@ -3,18 +3,15 @@ package org.springframework.samples.Visit.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.samples.Visit.VisitDTO;
 import org.springframework.samples.Visit.VisitExternalAPI;
 import org.springframework.samples.Visit.model.Visit;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.List;
+
 import java.util.Map;
 
 @Controller
@@ -29,23 +26,24 @@ public class VisitController {
 	}
 
 	@ModelAttribute("visit")
-	public VisitDTO loadPetWithVisit(@PathVariable("petId") int petId,Map<String, Object> model){
-		VisitDTO visitDTO = new VisitDTO();
-		model.put("visit", visitDTO);
-		return visitDTO;
+	public Visit loadPetWithVisit(@PathVariable("petId") int petId,Map<String, Object> model){
+		Visit visit = new Visit();
+		model.put("visit", visit);
+		return visit;
 	}
 
 	@GetMapping("/owners/{ownerId}/pets/{petId}/visits/new")
 	public String initNewVisitForm(@PathVariable("ownerId") int ownerId, @PathVariable("petId") int petId,ModelMap model) {
 
-		VisitDTO visitDTO = new VisitDTO();
-		model.put("visit", visitDTO);
+		Visit visit = new Visit();
+		model.put("visit", visit);
 		return "pets/createOrUpdateVisitForm";
 	}
 
 	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
 	@Transactional
-	public String processNewVisitForm(@Valid @RequestBody VisitDTO visit, RedirectAttributes redirectAttributes) {
+	public String processNewVisitForm(@PathVariable("petId") int petId, @Valid Visit visit, RedirectAttributes redirectAttributes) {
+		visit.setPet_id(petId);
 		visitExternalAPI.save(visit);
 		redirectAttributes.addFlashAttribute("message", "Your visit has been booked");
 		return "redirect:/owners/{ownerId}";

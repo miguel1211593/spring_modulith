@@ -17,13 +17,6 @@ public interface VisitRepository extends Repository<Visit, Integer> {
 	@Transactional(readOnly = true)
 	Set<Visit> findVisitByPetId(@Param("id") Integer id);
 
-
-	@Query("SELECT visit FROM Visit visit WHERE visit.id=:id")
-	@Transactional(readOnly = true)
-	Visit findVisitById(@Param("id") Integer id);
-
-
-
 	@Query("SELECT visit FROM Visit visit")
 	@Transactional(readOnly = true)
 	List<Visit> findAll();

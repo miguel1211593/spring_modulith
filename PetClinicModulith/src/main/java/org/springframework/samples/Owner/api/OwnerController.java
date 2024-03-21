@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.samples.Owner.OwnerDTO;
 import org.springframework.samples.Owner.OwnerExternalAPI;
+import org.springframework.samples.Owner.model.Owner;
+import org.springframework.samples.Owner.model.OwnerPet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -35,23 +36,19 @@ public class OwnerController {
 	}
 
 
-	@ModelAttribute("owner")
-	public OwnerDTO findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
-		return ownerId == null ? new OwnerDTO() : this.ownerExternalAPI.findById(ownerId);
+	@ModelAttribute("owner1")
+	public Owner findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
+		return ownerId == null ? new Owner() : this.ownerExternalAPI.findById(ownerId);
 	}
-
-
-
-
 
 	@GetMapping("/owners/new")
 	public String initCreationForm(Map<String, Object> model) {
-		OwnerDTO owner = new OwnerDTO();
+		Owner owner = new Owner();
 		model.put("owner", owner);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 	@PostMapping("/owners/new")
-	public String processCreationForm(@Valid OwnerDTO owner, BindingResult result, RedirectAttributes redirectAttributes) {
+	public String processCreationForm(@Valid Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
 
 		if (StringUtils.hasText(owner.getLastName())  && ownerExternalAPI.findByName(owner.getFirstName(),owner.getLastName()) != null) {
 			result.rejectValue("firstName", "duplicate", "already exists");
@@ -74,12 +71,12 @@ public class OwnerController {
 	}
 
 	@GetMapping("/owners")
-	public String processFindForm(@RequestParam(defaultValue = "1") int page, OwnerDTO owner, BindingResult result,
+	public String processFindForm(@RequestParam(defaultValue = "1") int page, Owner owner, BindingResult result,
 								  Model model) {
 		if (owner.getLastName() == null) {
 			owner.setLastName("");
 		}
-		Page<OwnerDTO> ownersResults = findPaginatedForOwnersLastName(page, owner.getLastName());
+		Page<Owner> ownersResults = findPaginatedForOwnersLastName(page, owner.getLastName());
 		if (ownersResults.isEmpty()) {
 			result.rejectValue("lastName", "notFound", "not found");
 			return "owners/findOwners";
@@ -94,18 +91,20 @@ public class OwnerController {
 
 	@GetMapping("/owners/{ownerId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, ModelMap model) {
-		OwnerDTO owner = this.ownerExternalAPI.findById(ownerId);
+		Owner owner = this.ownerExternalAPI.findById(ownerId);
 		model.put("owner", owner);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping("/owners/{ownerId}/edit")
-	public String processUpdateOwnerForm(@Valid OwnerDTO owner, BindingResult result, @PathVariable("ownerId") int ownerId,
+	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result, @PathVariable("ownerId") int ownerId,
 										 RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("error", "There was an error in updating the owner.");
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
+		List<OwnerPet> ownerPets = ownerExternalAPI.findPetByOwner(ownerId);
+		owner.setPets(ownerPets);
 		owner.setId(ownerId);
 		this.ownerExternalAPI.save(owner);
 		redirectAttributes.addFlashAttribute("message", "Owner Values Updated");
@@ -116,19 +115,19 @@ public class OwnerController {
 	@GetMapping("/owners/{ownerId}")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		OwnerDTO owner = this.ownerExternalAPI.findById(ownerId);
+		Owner owner = this.ownerExternalAPI.findById(ownerId);
 		mav.addObject(owner);
 		return mav;
 	}
 
-	private Page<OwnerDTO> findPaginatedForOwnersLastName(int page, String lastname) {
+	private Page<Owner> findPaginatedForOwnersLastName(int page, String lastname) {
 		int pageSize = 5;
 		Pageable pageable = PageRequest.of(page - 1, pageSize);
 		return ownerExternalAPI.findByLastName(lastname, pageable);
 	}
 
-	private String addPaginationModel(int page, Model model, Page<OwnerDTO> paginated) {
-		List<OwnerDTO> listOwners = paginated.getContent();
+	private String addPaginationModel(int page, Model model, Page<Owner> paginated) {
+		List<Owner> listOwners = paginated.getContent();
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", paginated.getTotalPages());
 		model.addAttribute("totalItems", paginated.getTotalElements());

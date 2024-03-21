@@ -46,21 +46,21 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.samples.petclinic.controller.OwnerController;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
+import org.springframework.samples.petclinic.controller.MonoOwnerController;
+import org.springframework.samples.petclinic.model.MonoOwner;
+import org.springframework.samples.petclinic.model.MonoPet;
+import org.springframework.samples.petclinic.model.MonoPetType;
+import org.springframework.samples.petclinic.model.MonoVisit;
+import org.springframework.samples.petclinic.repository.MonoOwnerRepository;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
- * Test class for {@link OwnerController}
+ * Test class for {@link MonoOwnerController}
  *
  * @author Colin But
  */
-@WebMvcTest(OwnerController.class)
+@WebMvcTest(MonoOwnerController.class)
 @DisabledInNativeImage
 @DisabledInAotMode
 class OwnerControllerTests {
@@ -71,18 +71,18 @@ class OwnerControllerTests {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private OwnerRepository owners;
+	private MonoOwnerRepository owners;
 
-	private Owner george() {
-		Owner george = new Owner();
+	private MonoOwner george() {
+		MonoOwner george = new MonoOwner();
 		george.setId(TEST_OWNER_ID);
 		george.setFirstName("George");
 		george.setLastName("Franklin");
 		george.setAddress("110 W. Liberty St.");
 		george.setCity("Madison");
 		george.setTelephone("6085551023");
-		Pet max = new Pet();
-		PetType dog = new PetType();
+		MonoPet max = new MonoPet();
+		MonoPetType dog = new MonoPetType();
 		dog.setName("dog");
 		max.setType(dog);
 		max.setName("Max");
@@ -95,14 +95,14 @@ class OwnerControllerTests {
 	@BeforeEach
 	void setup() {
 
-		Owner george = george();
+		MonoOwner george = george();
 		given(this.owners.findByLastName(eq("Franklin"), any(Pageable.class)))
-			.willReturn(new PageImpl<Owner>(Lists.newArrayList(george)));
+			.willReturn(new PageImpl<MonoOwner>(Lists.newArrayList(george)));
 
-		given(this.owners.findAll(any(Pageable.class))).willReturn(new PageImpl<Owner>(Lists.newArrayList(george)));
+		given(this.owners.findAll(any(Pageable.class))).willReturn(new PageImpl<MonoOwner>(Lists.newArrayList(george)));
 
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(george);
-		Visit visit = new Visit();
+		MonoVisit visit = new MonoVisit();
 		visit.setDate(LocalDate.now());
 		george.getPet("Max").getVisits().add(visit);
 
@@ -148,14 +148,14 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
-		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList(george(), new Owner()));
+		Page<MonoOwner> tasks = new PageImpl<MonoOwner>(Lists.newArrayList(george(), new MonoOwner()));
 		Mockito.when(this.owners.findByLastName(anyString(), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}
 
 	@Test
 	void testProcessFindFormByLastName() throws Exception {
-		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList(george()));
+		Page<MonoOwner> tasks = new PageImpl<MonoOwner>(Lists.newArrayList(george()));
 		Mockito.when(this.owners.findByLastName(eq("Franklin"), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
 			.andExpect(status().is3xxRedirection())
@@ -164,7 +164,7 @@ class OwnerControllerTests {
 
 	@Test
 	void testProcessFindFormNoOwnersFound() throws Exception {
-		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList());
+		Page<MonoOwner> tasks = new PageImpl<MonoOwner>(Lists.newArrayList());
 		Mockito.when(this.owners.findByLastName(eq("Unknown Surname"), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Unknown Surname"))
 			.andExpect(status().isOk())
@@ -230,13 +230,13 @@ class OwnerControllerTests {
 			.andExpect(model().attribute("owner", hasProperty("city", is("Madison"))))
 			.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
 			.andExpect(model().attribute("owner", hasProperty("pets", not(empty()))))
-			.andExpect(model().attribute("owner", hasProperty("pets", new BaseMatcher<List<Pet>>() {
+			.andExpect(model().attribute("owner", hasProperty("pets", new BaseMatcher<List<MonoPet>>() {
 
 				@Override
 				public boolean matches(Object item) {
 					@SuppressWarnings("unchecked")
-					List<Pet> pets = (List<Pet>) item;
-					Pet pet = pets.get(0);
+					List<MonoPet> pets = (List<MonoPet>) item;
+					MonoPet pet = pets.get(0);
 					if (pet.getVisits().isEmpty()) {
 						return false;
 					}

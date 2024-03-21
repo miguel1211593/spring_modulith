@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test class for {@link CrashController}
+ * Test class for {@link MonoCrashController}
  *
  * @author Colin But
  * @author Alex Lutz
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 // luck ((plain(st) UNIT test)! :)
 class CrashControllerTests {
 
-	CrashController testee = new CrashController();
+	MonoCrashController testee = new MonoCrashController();
 
 	@Test
 	void testTriggerException() throws Exception {

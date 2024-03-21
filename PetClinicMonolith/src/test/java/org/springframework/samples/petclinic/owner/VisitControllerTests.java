@@ -29,19 +29,19 @@ import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.samples.petclinic.controller.VisitController;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
+import org.springframework.samples.petclinic.controller.MonoVisitController;
+import org.springframework.samples.petclinic.model.MonoOwner;
+import org.springframework.samples.petclinic.model.MonoPet;
+import org.springframework.samples.petclinic.repository.MonoOwnerRepository;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
- * Test class for {@link VisitController}
+ * Test class for {@link MonoVisitController}
  *
  * @author Colin But
  */
-@WebMvcTest(VisitController.class)
+@WebMvcTest(MonoVisitController.class)
 @DisabledInNativeImage
 @DisabledInAotMode
 class VisitControllerTests {
@@ -54,12 +54,12 @@ class VisitControllerTests {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private OwnerRepository owners;
+	private MonoOwnerRepository owners;
 
 	@BeforeEach
 	void init() {
-		Owner owner = new Owner();
-		Pet pet = new Pet();
+		MonoOwner owner = new MonoOwner();
+		MonoPet pet = new MonoPet();
 		owner.addPet(pet);
 		pet.setId(TEST_PET_ID);
 		given(this.owners.findById(TEST_OWNER_ID)).willReturn(owner);

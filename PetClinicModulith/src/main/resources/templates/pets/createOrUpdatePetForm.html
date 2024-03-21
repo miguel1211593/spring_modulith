@@ -7,7 +7,7 @@
     <th:block th:if="${true}">New </th:block>
     Pet
   </h2>
-  <form th:object="${pet}" class="form-horizontal" method="post">
+  <form th:object="${pet1}" class="form-horizontal" method="post">
     <input type="hidden" name="id" th:value="*{id}" />
     <div class="form-group has-feedback">
       <div class="form-group">
@@ -23,7 +23,7 @@
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <button
-          th:with="text=${pet['new']} ? 'Add Pet' : 'Update Pet'"
+          th:with="text=${pet1['new']} ? 'Add Pet' : 'Update Pet'"
           class="btn btn-primary" type="submit" th:text="${text}">Add
           Pet</button>
       </div>

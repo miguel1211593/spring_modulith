@@ -1,10 +1,11 @@
 package org.springframework.samples.Pet.model;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 @Entity
@@ -14,6 +15,28 @@ public class Pet {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(name = "name")
+	private String name;
+
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
+	@Column(name = "birth_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate birthDate;
+
+	@ManyToOne
+	@JoinColumn(name = "type_id")
+	private PetType type;
+
+	@Column(name = "owner_id")
+	private Integer owner_id;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "pet_id")
+	private Set<PetVisit> visits = new LinkedHashSet<>() ;
 
 	public Integer getId() {
 		return id;
@@ -22,8 +45,6 @@ public class Pet {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(name = "name")
-	private String name;
 
 	public String getName() {
 		return this.name;
@@ -33,14 +54,6 @@ public class Pet {
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return this.getName();
-	}
-	@Column(name = "birth_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate birthDate;
-
 	public LocalDate getBirthDate() {
 		return birthDate;
 	}
@@ -49,16 +62,13 @@ public class Pet {
 		this.birthDate = birthDate;
 	}
 
-	public Integer getType() {
-		return type_id;
+	public PetType getType() {
+		return type;
 	}
 
-	public void setType(Integer type) {
-		this.type_id = type;
+	public void setType(PetType type) {
+		this.type = type;
 	}
-
-	@Column(name = "type_id")
-	private Integer type_id;
 
 	public Integer getOwner_id() {
 		return owner_id;
@@ -68,11 +78,16 @@ public class Pet {
 		this.owner_id = owner_id;
 	}
 
-	@Column(name = "owner_id")
-	private Integer owner_id;
-
 	public boolean isNew() {
 		return this.id == null;
+	}
+
+	public Set<PetVisit> getVisits() {
+		return visits;
+	}
+
+	public void setVisits(Set<PetVisit> visits) {
+		this.visits = visits;
 	}
 
 }

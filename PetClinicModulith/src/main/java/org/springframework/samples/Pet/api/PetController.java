@@ -2,9 +2,9 @@ package org.springframework.samples.Pet.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.Pet.PetDTO;
 import org.springframework.samples.Pet.PetExternalAPI;
-import org.springframework.samples.PetType.PetTypeDTO;
+import org.springframework.samples.Pet.model.Pet;
+import org.springframework.samples.Pet.model.PetType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -26,16 +26,14 @@ public class PetController {
 	private final PetExternalAPI petExternalAPI;
 
 	@ModelAttribute("types")
-	public Collection<String> populatePetTypes() {
-		return this.petExternalAPI.findPetTypesByName();
+	public Collection<PetType> populatePetTypes() {
+		return this.petExternalAPI.findPetTypes();
 	}
 
-
-
-	@ModelAttribute("pet")
-	public PetDTO findPet(@PathVariable(name = "petId", required = false) Integer petId) {
+	@ModelAttribute("pet1")
+	public Pet findPet(@PathVariable(name = "petId", required = false) Integer petId) {
 		if (petId == null) {
-			return new PetDTO();
+			return new Pet();
 		}
         return petExternalAPI.getPetById(petId);
 	}
@@ -47,13 +45,13 @@ public class PetController {
 
 	@GetMapping("/pets/new")
 	public String initCreationForm(ModelMap model) {
-		PetDTO pet = new PetDTO();
-		model.put("pet", pet);
+		Pet pet = new Pet();
+		model.put("pet1", pet);
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping("/pets/new")
-	public String processCreationForm(@PathVariable("ownerId") int ownerId, @Valid PetDTO pet, BindingResult result, ModelMap model,
+	public String processCreationForm(@PathVariable("ownerId") int ownerId, @Valid Pet pet, BindingResult result, ModelMap model,
 									  RedirectAttributes redirectAttributes) {
 
 		if (StringUtils.hasText(pet.getName()) && pet.isNew() && petExternalAPI.getPetByName(pet.getName(), true) != null) {
@@ -80,19 +78,19 @@ public class PetController {
 	@GetMapping("/pets/{petId}/edit")
 	public String initUpdateForm(@PathVariable("petId") int petId, ModelMap model,
 								 RedirectAttributes redirectAttributes) {
-		PetDTO pet = petExternalAPI.getPetById(petId);
+		Pet pet = petExternalAPI.getPetById(petId);
 		model.put("pet", pet);
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping("/pets/{petId}/edit")
-	public String processUpdateForm(@PathVariable("ownerId") int ownerId,@Valid PetDTO pet, BindingResult result,ModelMap model,
+	public String processUpdateForm(@PathVariable("ownerId") int ownerId,@Valid Pet pet, BindingResult result,ModelMap model,
 									RedirectAttributes redirectAttributes) {
 
 		String petName = pet.getName();
 
 		if (StringUtils.hasText(petName)) {
-			PetDTO existingPet = petExternalAPI.getPetByName(petName.toLowerCase(), false);
+			Pet existingPet = petExternalAPI.getPetByName(petName.toLowerCase(), false);
 			if (existingPet != null && !Objects.equals(existingPet.getId(), pet.getId())) {
 				result.rejectValue("name", "duplicate", "already exists");
 			}

@@ -16,7 +16,7 @@
 package org.springframework.samples.petclinic.vet;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.model.MonoVet;
 import org.springframework.util.SerializationUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,12 +28,12 @@ class VetTests {
 
 	@Test
 	void testSerialization() {
-		Vet vet = new Vet();
+		MonoVet vet = new MonoVet();
 		vet.setFirstName("Zaphod");
 		vet.setLastName("Beeblebrox");
 		vet.setId(123);
 		@SuppressWarnings("deprecation")
-		Vet other = (Vet) SerializationUtils.deserialize(SerializationUtils.serialize(vet));
+        MonoVet other = (MonoVet) SerializationUtils.deserialize(SerializationUtils.serialize(vet));
 		assertThat(other.getFirstName()).isEqualTo(vet.getFirstName());
 		assertThat(other.getLastName()).isEqualTo(vet.getLastName());
 		assertThat(other.getId()).isEqualTo(vet.getId());

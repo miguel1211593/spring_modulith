@@ -1,57 +1,30 @@
 package org.springframework.samples.Visit.management;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.samples.Visit.VisitDTO;
 import org.springframework.samples.Visit.VisitExternalAPI;
 import org.springframework.samples.Visit.VisitInternalAPI;
-import org.springframework.samples.Visit.mapper.VisitMapper;
 import org.springframework.samples.Visit.model.Visit;
 import org.springframework.samples.Visit.repository.VisitRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class VisitManagement implements VisitExternalAPI, VisitInternalAPI {
 
 	private final VisitRepository visitRepository;
-	@Qualifier("visitMapper")
-	private final VisitMapper mapper;
+
 
 	@Override
-	public void save(VisitDTO visitDTO) {
-		visitRepository.save(mapper.toVisit(visitDTO));
-	}
-
-	@Override
-	public List<VisitDTO> findAll() {
-		List<Visit> visits = visitRepository.findAll();
-		return visits.stream()
-			.map(visit -> new VisitDTO(visit.getId(),visit.getDescription(), visit.getPet_id(), visit.getDate() ))
-			.collect(Collectors.toList());
+	public void save(Visit visit) {
+		visitRepository.save(visit);
 	}
 
 	@Override
-	public Set<VisitDTO> findVisitByPetId(int pet_id) {
-		return convertToDTO(visitRepository.findVisitByPetId(pet_id));
+	public List<Visit> findAll() {
+        return visitRepository.findAll();
 	}
 
-	private Set<VisitDTO> convertToDTO(Set<Visit> visits) {
-		Set<VisitDTO> visitDTOList = new HashSet<>();
-		for (Visit visit : visits) {
-			VisitDTO visitDTO = new VisitDTO();
-			visitDTO.setVisit_id(visit.getId());
-			visitDTO.setDate(visit.getDate());
-			visitDTO.setDescription(visit.getDescription());
-			visitDTO.setPet_id(visit.getPet_id());
-			visitDTOList.add(visitDTO);
-		}
-		return visitDTOList;
-	}
 
 }

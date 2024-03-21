@@ -4,9 +4,11 @@ package org.springframework.samples.Visit;
 import org.springframework.samples.Visit.model.Visit;
 
 import java.util.List;
+import java.util.Set;
 
 public interface VisitExternalAPI {
 
-	void save(VisitDTO visitDTO);
-	List<VisitDTO> findAll();
+	void save(Visit visit);
+	List<Visit> findAll();
+
 }

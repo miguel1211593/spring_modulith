@@ -40,7 +40,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
 /**
- * Integration Test for {@link CrashController}.
+ * Integration Test for {@link MonoCrashController}.
  *
  * @author Alex Lutz
  */

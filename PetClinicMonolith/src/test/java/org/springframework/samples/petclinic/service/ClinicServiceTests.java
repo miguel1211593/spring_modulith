@@ -29,13 +29,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.repository.VetRepository;
+import org.springframework.samples.petclinic.model.MonoOwner;
+import org.springframework.samples.petclinic.repository.MonoOwnerRepository;
+import org.springframework.samples.petclinic.model.MonoPet;
+import org.springframework.samples.petclinic.model.MonoPetType;
+import org.springframework.samples.petclinic.model.MonoVisit;
+import org.springframework.samples.petclinic.model.MonoVet;
+import org.springframework.samples.petclinic.repository.MonoVetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,16 +74,16 @@ import org.springframework.transaction.annotation.Transactional;
 class ClinicServiceTests {
 
 	@Autowired
-	protected OwnerRepository owners;
+	protected MonoOwnerRepository owners;
 
 	@Autowired
-	protected VetRepository vets;
+	protected MonoVetRepository vets;
 
 	Pageable pageable;
 
 	@Test
 	void shouldFindOwnersByLastName() {
-		Page<Owner> owners = this.owners.findByLastName("Davis", pageable);
+		Page<MonoOwner> owners = this.owners.findByLastName("Davis", pageable);
 		assertThat(owners).hasSize(2);
 
 		owners = this.owners.findByLastName("Daviss", pageable);
@@ -92,7 +92,7 @@ class ClinicServiceTests {
 
 	@Test
 	void shouldFindSingleOwnerWithPet() {
-		Owner owner = this.owners.findById(1);
+		MonoOwner owner = this.owners.findById(1);
 		assertThat(owner.getLastName()).startsWith("Franklin");
 		assertThat(owner.getPets()).hasSize(1);
 		assertThat(owner.getPets().get(0).getType()).isNotNull();
@@ -102,10 +102,10 @@ class ClinicServiceTests {
 	@Test
 	@Transactional
 	void shouldInsertOwner() {
-		Page<Owner> owners = this.owners.findByLastName("Schultz", pageable);
+		Page<MonoOwner> owners = this.owners.findByLastName("Schultz", pageable);
 		int found = (int) owners.getTotalElements();
 
-		Owner owner = new Owner();
+		MonoOwner owner = new MonoOwner();
 		owner.setFirstName("Sam");
 		owner.setLastName("Schultz");
 		owner.setAddress("4, Evans Street");
@@ -121,7 +121,7 @@ class ClinicServiceTests {
 	@Test
 	@Transactional
 	void shouldUpdateOwner() {
-		Owner owner = this.owners.findById(1);
+		MonoOwner owner = this.owners.findById(1);
 		String oldLastName = owner.getLastName();
 		String newLastName = oldLastName + "X";
 
@@ -135,24 +135,24 @@ class ClinicServiceTests {
 
 	@Test
 	void shouldFindAllPetTypes() {
-		Collection<PetType> petTypes = this.owners.findPetTypes();
+		Collection<MonoPetType> petTypes = this.owners.findPetTypes();
 
-		PetType petType1 = EntityUtils.getById(petTypes, PetType.class, 1);
+		MonoPetType petType1 = EntityUtils.getById(petTypes, MonoPetType.class, 1);
 		assertThat(petType1.getName()).isEqualTo("cat");
-		PetType petType4 = EntityUtils.getById(petTypes, PetType.class, 4);
+		MonoPetType petType4 = EntityUtils.getById(petTypes, MonoPetType.class, 4);
 		assertThat(petType4.getName()).isEqualTo("snake");
 	}
 
 	@Test
 	@Transactional
 	void shouldInsertPetIntoDatabaseAndGenerateId() {
-		Owner owner6 = this.owners.findById(6);
+		MonoOwner owner6 = this.owners.findById(6);
 		int found = owner6.getPets().size();
 
-		Pet pet = new Pet();
+		MonoPet pet = new MonoPet();
 		pet.setName("bowser");
-		Collection<PetType> types = this.owners.findPetTypes();
-		pet.setType(EntityUtils.getById(types, PetType.class, 2));
+		Collection<MonoPetType> types = this.owners.findPetTypes();
+		pet.setType(EntityUtils.getById(types, MonoPetType.class, 2));
 		pet.setBirthDate(LocalDate.now());
 		owner6.addPet(pet);
 		assertThat(owner6.getPets().size()).isEqualTo(found + 1);
@@ -169,8 +169,8 @@ class ClinicServiceTests {
 	@Test
 	@Transactional
 	void shouldUpdatePetName() throws Exception {
-		Owner owner6 = this.owners.findById(6);
-		Pet pet7 = owner6.getPet(7);
+		MonoOwner owner6 = this.owners.findById(6);
+		MonoPet pet7 = owner6.getPet(7);
 		String oldName = pet7.getName();
 
 		String newName = oldName + "X";
@@ -184,9 +184,9 @@ class ClinicServiceTests {
 
 	@Test
 	void shouldFindVets() {
-		Collection<Vet> vets = this.vets.findAll();
+		Collection<MonoVet> vets = this.vets.findAll();
 
-		Vet vet = EntityUtils.getById(vets, Vet.class, 3);
+		MonoVet vet = EntityUtils.getById(vets, MonoVet.class, 3);
 		assertThat(vet.getLastName()).isEqualTo("Douglas");
 		assertThat(vet.getNrOfSpecialties()).isEqualTo(2);
 		assertThat(vet.getSpecialties().get(0).getName()).isEqualTo("dentistry");
@@ -196,10 +196,10 @@ class ClinicServiceTests {
 	@Test
 	@Transactional
 	void shouldAddNewVisitForPet() {
-		Owner owner6 = this.owners.findById(6);
-		Pet pet7 = owner6.getPet(7);
+		MonoOwner owner6 = this.owners.findById(6);
+		MonoPet pet7 = owner6.getPet(7);
 		int found = pet7.getVisits().size();
-		Visit visit = new Visit();
+		MonoVisit visit = new MonoVisit();
 		visit.setDescription("test");
 
 		owner6.addVisit(pet7.getId(), visit);
@@ -214,14 +214,14 @@ class ClinicServiceTests {
 
 	@Test
 	void shouldFindVisitsByPetId() throws Exception {
-		Owner owner6 = this.owners.findById(6);
-		Pet pet7 = owner6.getPet(7);
-		Collection<Visit> visits = pet7.getVisits();
+		MonoOwner owner6 = this.owners.findById(6);
+		MonoPet pet7 = owner6.getPet(7);
+		Collection<MonoVisit> visits = pet7.getVisits();
 
 		assertThat(visits) //
 			.hasSize(2) //
 			.element(0)
-			.extracting(Visit::getDate)
+			.extracting(MonoVisit::getDate)
 			.isNotNull();
 	}
 

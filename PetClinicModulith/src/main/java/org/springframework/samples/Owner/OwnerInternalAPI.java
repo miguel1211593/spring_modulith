@@ -1,7 +1,9 @@
 package org.springframework.samples.Owner;
 
+import org.springframework.samples.Owner.model.Owner;
+
 public interface OwnerInternalAPI {
 
-	OwnerDTO findById(Integer id);
+	Owner findById(Integer id);
 
 }

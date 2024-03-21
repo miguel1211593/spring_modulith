@@ -1,14 +1,15 @@
 package org.springframework.samples.Pet;
 
-import org.springframework.samples.PetType.PetTypeDTO;
+import org.springframework.samples.Pet.model.Pet;
+import org.springframework.samples.Pet.model.PetType;
 
 import java.util.Collection;
 
 public interface PetExternalAPI {
-	Collection<String> findPetTypesByName();
+	Collection<PetType> findPetTypes();
 
-	PetDTO getPetById(Integer petId);
-	PetDTO getPetByName(String name, boolean isNew);
+	Pet getPetById(Integer petId);
+	Pet getPetByName(String name, boolean isNew);
 
-	void save(PetDTO petDTO);
+	void save(Pet pet);
 }
