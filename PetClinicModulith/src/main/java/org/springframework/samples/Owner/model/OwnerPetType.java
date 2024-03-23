@@ -13,6 +13,15 @@ public class OwnerPetType {
 	@Column(name = "name")
 	private String name;
 
+	public OwnerPetType(Integer id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public OwnerPetType() {
+
+	}
+
 	public Integer getId() {
 		return id;
 	}

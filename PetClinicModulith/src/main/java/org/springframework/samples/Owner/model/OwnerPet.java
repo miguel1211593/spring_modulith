@@ -18,6 +18,18 @@ public class OwnerPet {
 	@Column(name = "name")
 	private String name;
 
+	public OwnerPet(Integer id, String name, LocalDate birthDate, Integer owner_id, OwnerPetType type) {
+		this.id = id;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.owner_id = owner_id;
+		this.type = type;
+	}
+
+	public OwnerPet() {
+
+	}
+
 	@Override
 	public String toString() {
 		return this.getName();

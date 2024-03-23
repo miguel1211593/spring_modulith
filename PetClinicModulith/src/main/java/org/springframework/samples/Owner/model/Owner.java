@@ -45,6 +45,20 @@ public class Owner implements Serializable {
 	@JoinColumn(name = "owner_id")
 	private List<OwnerPet> pets = new ArrayList<>();
 
+	public Owner(Integer id, String firstName, String lastName, String address, String city, String telephone, List<OwnerPet> pets) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.telephone = telephone;
+		this.pets = pets;
+	}
+
+	public Owner() {
+
+	}
+
 	public Integer getId() {
 		return id;
 	}
