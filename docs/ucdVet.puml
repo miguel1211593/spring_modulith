@@ -4,11 +4,10 @@
 left to right direction
 actor Veterinarian as V
 
-package Visit{
-usecase UC8 as "Add Visit"
-usecase UC9 as "View Visit By Pet"
+package Vet{
+usecase UC7 as "Get Veterinarians"
 }
 
-V --> UC8
-V --> UC9
+V --> UC7
+
 @enduml

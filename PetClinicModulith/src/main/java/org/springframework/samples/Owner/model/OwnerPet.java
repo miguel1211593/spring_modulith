@@ -2,8 +2,6 @@ package org.springframework.samples.Owner.model;
 
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.Pet.model.PetType;
-import org.springframework.samples.Pet.model.PetVisit;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;

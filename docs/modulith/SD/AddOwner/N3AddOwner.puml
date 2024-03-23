@@ -3,7 +3,6 @@
 actor Veterinarian
 participant "OwnerController" as Controller
 participant "OwnerManagement" as Service
-participant "OwnerMapper" as Mapper
 participant "OwnerRepository" as Repository
 
 Veterinarian -> Controller: POST /owners/new
@@ -15,13 +14,9 @@ Service -> Repository: findById()
 activate Repository
 Repository --> Service: owner
 deactivate Repository
+Service --> Controller: owner
 alt owner == null
-Service --> Controller: owner == null
-Controller -> Service: save(ownerDTO)
-Service -> Mapper: toOwner(ownerDTO)
-activate Mapper
-Mapper --> Service: owner
-deactivate Mapper
+Controller -> Service: save(owner)
 Service -> Repository: save(owner)
 Service --> Controller: owner_id
 Controller --> Veterinarian: return "redirect:/owners/owner_id"

@@ -34,9 +34,7 @@ public class Pet {
 	@Column(name = "owner_id")
 	private Integer owner_id;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "pet_id")
-	private Set<PetVisit> visits = new LinkedHashSet<>() ;
+
 
 	public Integer getId() {
 		return id;
@@ -82,12 +80,5 @@ public class Pet {
 		return this.id == null;
 	}
 
-	public Set<PetVisit> getVisits() {
-		return visits;
-	}
-
-	public void setVisits(Set<PetVisit> visits) {
-		this.visits = visits;
-	}
 
 }

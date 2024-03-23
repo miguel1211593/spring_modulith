@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.samples.Pet.PetExternalAPI;
 import org.springframework.samples.Pet.model.Pet;
 import org.springframework.samples.Pet.model.PetType;
-import org.springframework.samples.Pet.model.PetVisit;
 import org.springframework.samples.Pet.repository.PetRepository;
 import org.springframework.samples.Pet.repository.PetTypeRepository;
-import org.springframework.samples.Pet.repository.PetVisitRepository;
 
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -19,7 +17,6 @@ public class PetManagement implements PetExternalAPI {
 
 	private final PetRepository petRepository;
 	private final PetTypeRepository petTypeRepository;
-	private final PetVisitRepository petVisitRepository;
 
 
 
@@ -30,10 +27,7 @@ public class PetManagement implements PetExternalAPI {
 
 	@Override
 	public Pet getPetById(Integer petId) {
-		Pet pet = petRepository.findById(petId);
-		Set<PetVisit> visit = petVisitRepository.findVisitByPetId(petId);
-		pet.setVisits(visit);
-		return pet;
+        return petRepository.findById(petId);
 	}
 
 	@Override
