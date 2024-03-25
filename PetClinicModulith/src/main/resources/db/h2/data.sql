@@ -47,9 +47,26 @@ INSERT INTO pets VALUES (default, 'Freddy', '2010-03-09', 5, 9);
 INSERT INTO pets VALUES (default, 'Lucky', '2010-06-24', 2, 10);
 INSERT INTO pets VALUES (default, 'Sly', '2012-06-08', 1, 10);
 
-
+INSERT INTO owner_pets VALUES (default, 'Leo', '2010-09-07', 1, 1);
+INSERT INTO owner_pets VALUES (default, 'Basil', '2012-08-06', 6, 2);
+INSERT INTO owner_pets VALUES (default, 'Rosy', '2011-04-17', 2, 3);
+INSERT INTO owner_pets VALUES (default, 'Jewel', '2010-03-07', 2, 3);
+INSERT INTO owner_pets VALUES (default, 'Iggy', '2010-11-30', 3, 4);
+INSERT INTO owner_pets VALUES (default, 'George', '2010-01-20', 4, 5);
+INSERT INTO owner_pets VALUES (default, 'Samantha', '2012-09-04', 1, 6);
+INSERT INTO owner_pets VALUES (default, 'Max', '2012-09-04', 1, 6);
+INSERT INTO owner_pets VALUES (default, 'Lucky', '2011-08-06', 5, 7);
+INSERT INTO owner_pets VALUES (default, 'Mulligan', '2007-02-24', 2, 8);
+INSERT INTO owner_pets VALUES (default, 'Freddy', '2010-03-09', 5, 9);
+INSERT INTO owner_pets VALUES (default, 'Lucky', '2010-06-24', 2, 10);
+INSERT INTO owner_pets VALUES (default, 'Sly', '2012-06-08', 1, 10);
 
 INSERT INTO visits VALUES (default, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits VALUES (default, 8, '2013-01-02', 'rabies shot');
 INSERT INTO visits VALUES (default, 8, '2013-01-03', 'neutered');
 INSERT INTO visits VALUES (default, 7, '2013-01-04', 'spayed');
+
+INSERT INTO owner_visits VALUES (default, 7, '2013-01-01', 'rabies shot');
+INSERT INTO owner_visits VALUES (default, 8, '2013-01-02', 'rabies shot');
+INSERT INTO owner_visits VALUES (default, 8, '2013-01-03', 'neutered');
+INSERT INTO owner_visits VALUES (default, 7, '2013-01-04', 'spayed');

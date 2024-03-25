@@ -1,10 +1,13 @@
 package org.springframework.samples.Visit.management;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.samples.Visit.AddVisitEvent;
 import org.springframework.samples.Visit.VisitExternalAPI;
 import org.springframework.samples.Visit.model.Visit;
 import org.springframework.samples.Visit.repository.VisitRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,10 +16,12 @@ import java.util.List;
 public class VisitManagement implements VisitExternalAPI {
 
 	private final VisitRepository visitRepository;
-
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Override
+	@Transactional
 	public void save(Visit visit) {
+		eventPublisher.publishEvent(new AddVisitEvent(visit.getId(),visit.getDate(),visit.getDescription(),visit.getPet_id()));
 		visitRepository.save(visit);
 	}
 

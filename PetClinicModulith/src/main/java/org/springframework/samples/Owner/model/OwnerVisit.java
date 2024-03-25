@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "visits")
+@Table(name = "owner_visits")
 public class OwnerVisit {
 
 	@Id
@@ -28,6 +28,13 @@ public class OwnerVisit {
 
 	public OwnerVisit() {
 		this.date = LocalDate.now();
+	}
+
+	public OwnerVisit(Integer id, Integer pet_id, LocalDate date, String description) {
+		this.id = id;
+		this.pet_id = pet_id;
+		this.date = date;
+		this.description = description;
 	}
 
 	public Integer getId() {

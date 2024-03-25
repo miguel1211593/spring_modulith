@@ -4,15 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.samples.Owner.OwnerExternalAPI;
 import org.springframework.samples.Owner.model.Owner;
 import org.springframework.samples.Owner.model.OwnerPet;
+import org.springframework.samples.Owner.model.OwnerPetType;
 import org.springframework.samples.Owner.model.OwnerVisit;
 import org.springframework.samples.Owner.repository.OwnerRepository;
 import org.springframework.samples.Owner.repository.OwnerPetRepository;
 
 
 import org.springframework.samples.Owner.repository.OwnerVisitRepository;
+import org.springframework.samples.Pet.AddPetEvent;
+import org.springframework.samples.Pet.EditPetEvent;
+import org.springframework.samples.Pet.model.Pet;
+import org.springframework.samples.Visit.AddVisitEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -85,4 +91,22 @@ public class OwnerManagement implements OwnerExternalAPI {
 		return repository.findByName(firstName,lastName);
 	}
 
+	@ApplicationModuleListener
+	void onNewPetEvent(AddPetEvent event) {
+		petRepository.save(new OwnerPet(event.getId(),event.getName(),event.getBirthDate(), event.getOwner_id(), new OwnerPetType(event.getType_id(), event.getType())));
+	}
+
+	@ApplicationModuleListener
+	void onEditPetEvent(EditPetEvent event) {
+		OwnerPet existingPet = petRepository.findById(event.getId());
+		existingPet.setName(event.getName());
+		existingPet.setBirthDate(event.getBirthDate());
+		existingPet.setType(new OwnerPetType(event.getType_id(),event.getType()));
+		petRepository.save(existingPet);
+	}
+
+	@ApplicationModuleListener
+	void onNewVisitEvent(AddVisitEvent event) {
+		ownerVisitRepository.save(new OwnerVisit(event.getId(),event.getPet_id(), event.getDate(),event.getDescription()));
+	}
 }
