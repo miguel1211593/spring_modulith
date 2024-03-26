@@ -3,6 +3,7 @@
 actor Veterinarian
 participant "Pet" as Pet
 participant "PetType" as PetType
+participant "Owner" as Owner
 
 Veterinarian -> Pet: POST /owners/{ownerId}/pets/new
 activate Pet
@@ -14,6 +15,7 @@ alt pet doesn't exist
     activate PetType
     PetType --> Pet: type
     deactivate PetType
+    Pet -> Owner: events.publish(AddPet)
     Pet -> Pet : save(pet)
     Pet --> Veterinarian: return "redirect:/owners/{ownerId}"
     else incorrect data
