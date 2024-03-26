@@ -18,7 +18,7 @@ public class OwnerPet {
 	@Column(name = "name")
 	private String name;
 
-	public OwnerPet(Integer id, String name, LocalDate birthDate, Integer owner_id, OwnerPetType type) {
+	public OwnerPet(Integer id, String name, LocalDate birthDate, Integer owner_id, String type) {
 		this.id = id;
 		this.name = name;
 		this.birthDate = birthDate;
@@ -46,9 +46,8 @@ public class OwnerPet {
 	@JoinColumn(name = "pet_id")
 	private Set<OwnerVisit> visits = new LinkedHashSet<>() ;
 
-	@ManyToOne
-	@JoinColumn(name = "type_id")
-	private OwnerPetType type;
+	@Column(name = "type_name")
+	private String type;
 
 
 	public Integer getId() {
@@ -91,11 +90,11 @@ public class OwnerPet {
 		this.visits = visits;
 	}
 
-	public void setType(OwnerPetType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
-	public OwnerPetType getType() {
+	public String getType() {
 		return type;
 	}
 

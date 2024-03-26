@@ -21,6 +21,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.MonoOwner;
+import org.springframework.samples.petclinic.model.MonoPet;
 import org.springframework.samples.petclinic.model.MonoPetType;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,5 +81,9 @@ public interface MonoOwnerRepository extends Repository<MonoOwner, Integer> {
 	@Query("SELECT owner FROM MonoOwner owner")
 	@Transactional(readOnly = true)
 	Page<MonoOwner> findAll(Pageable pageable);
+
+	@Query("SELECT pet FROM MonoPet pet WHERE pet.id =:id")
+	@Transactional(readOnly = true)
+	MonoPet findPetById(@Param("id") Integer id);
 
 }

@@ -121,19 +121,20 @@ public class MonoPetController {
 	}
 
 	@GetMapping("/pets/{petId}/edit")
-	public String initUpdateForm(MonoOwner owner, @PathVariable("petId") int petId, ModelMap model,
+	public String initUpdateForm(@PathVariable("ownerId") int ownerId, @PathVariable("petId") int petId, ModelMap model,
 								 RedirectAttributes redirectAttributes) {
+		MonoOwner owner = owners.findById(ownerId);
 		MonoPet pet = owner.getPet(petId);
 		model.put("pet", pet);
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping("/pets/{petId}/edit")
-	public String processUpdateForm(@Valid MonoPet pet, BindingResult result, MonoOwner owner, ModelMap model,
+	public String processUpdateForm(@Valid MonoPet pet, BindingResult result, @PathVariable("ownerId") int ownerId, ModelMap model,
 									RedirectAttributes redirectAttributes) {
 
 		String petName = pet.getName();
-
+		MonoOwner owner = owners.findById(ownerId);
 		// checking if the pet name already exist for the owner
 		if (StringUtils.hasText(petName)) {
 			MonoPet existingPet = owner.getPet(petName.toLowerCase(), false);
@@ -152,7 +153,13 @@ public class MonoPetController {
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 
-		owner.addPet(pet);
+		MonoPet monoPet = owners.findPetById(pet.getId());
+		monoPet.setType(pet.getType());
+		monoPet.setBirthDate(pet.getBirthDate());
+		monoPet.setName(petName);
+
+
+		owner.addPet(monoPet);
 		this.owners.save(owner);
 		redirectAttributes.addFlashAttribute("message", "Pet details has been edited");
 		return "redirect:/owners/{ownerId}";
